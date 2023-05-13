@@ -1,15 +1,21 @@
 # bot.py
 import os
 
+# imports
 import discord
 import random
+
+from copypastaList import copypastas
+
 from dotenv import load_dotenv
 
 from discord.ext import commands
 
+
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 SERVER_NAME = os.getenv("DISCORD_SERVER_NAME")
+
 
 intents = discord.Intents.default()
 intents.members = True
@@ -42,15 +48,6 @@ async def on_member_join(member):
 
 @bot.command(name="copypasta", help="Gives you a random copypasta")
 async def generate_copypasta(ctx):
-    copypastas = [
-        "Don't you fucking danger ping me EVER again, I AM the danger. \U0001F620",
-        "Europe was founded in 1848 by Walker Texas Ranger when he rode a horse across the Atlantic, he called it 'Eastern USA' which was eventually abbreviated EU",
-        "APersonOnEarth isn't so great? Are you kidding me? When was the last time you saw a player with such an ability and movement with Vayne? APersonOnEarth puts the game on another level, and we will be blessed if we ever see a player with his skill and passion for the game again. Faker breaks records. Sneaky breaks records. APersonOnEarth breaks the rules. You can keep your statistics. I prefer the magic.",
-        "Hi Burn, I've noticed that recently you've been using the black and white filter™ feature for league of legends for nearly the entire game. Me and everyone else in the vc would appreciate it if you turn it off, thank you.",
-        "Hey guys I’m new here. But isn’t this a Worldwide league of legends championship? I think It’s really unfair that there aren’t any NA teams, why isn’t such a huge, skilled, representative portion of the playerbase not participating?",
-        "TSM aka 'Terminal Six, Mates' are the #1 NA team to speedrun airport any %. Their unique team name reflects the terminal their early flight departs from at Beijing International Airport after humiliating losses in Worlds, which helped them secure the world record pace for 2020 airport run.",
-        "After understanding the situation, we would like to clarify Imperial was not negative gaming, it was a normal summoner’s rift experience. We are preparing our best for the upcoming clash. Let’s go APE!",
-    ]
     response = random.choice(copypastas)
     await ctx.send(response)
 
@@ -125,6 +122,10 @@ async def on_message(message):
             await message.channel.send(file=picture)
     if any([x in message.content.lower() for x in cope_call]):
         with open("img/copege.gif", "rb") as f:
+            picture = discord.File(f)
+            await message.channel.send(file=picture)
+    if "promote" in message.content.lower():
+        with open("img/promote.png", "rb") as f:
             picture = discord.File(f)
             await message.channel.send(file=picture)
 
