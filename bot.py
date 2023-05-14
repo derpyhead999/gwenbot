@@ -95,6 +95,10 @@ async def uwufy_text(ctx):
     await ctx.send(output_text)
 
 
+# @bot.command(name='everythingv3', help='Generates an image based on AI stable diffusion model "everythingv3"')
+# async def stable_diff_generate(ctx):
+
+
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
