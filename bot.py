@@ -11,6 +11,13 @@ from dotenv import load_dotenv
 
 from discord.ext import commands
 
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
+import time
+
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -99,6 +106,38 @@ async def uwufy_text(ctx):
 # async def stable_diff_generate(ctx):
 
 
+# Searches up images with specific tags on danbooru
+@bot.command(name="danbooru", help="Gets a random image from danbooru")
+async def danbooru_search(ctx, tag1=None):
+    options = Options()
+    options.binary_location = (
+        "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
+    )
+    options.add_experimental_option("detach", True)
+    options.add_argument("--incognito")
+
+    driver = webdriver.Chrome(options=options)  # driver is the browser
+    time.sleep(2)
+    driver.get("https://danbooru.donmai.us/")
+
+    # Now find the search bar, input and search according to fields
+    elem = driver.find_element(By.NAME, "tags")
+
+    tags = ""
+    if tag1 != None:
+        tags += tag1
+
+    # Formatting
+    tags = tags.strip()
+    tags.replace(", ", ",")
+    tags.replace(" ", "_")
+    tags.replace(",", " ")
+    elem.send_keys(tags + Keys.RETURN)
+    # look for post, then open site, then send image
+    # driver.quit()
+
+
+# Recognises specific keyword from message and responds
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
