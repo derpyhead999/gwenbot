@@ -11,13 +11,12 @@ from dotenv import load_dotenv
 
 from discord.ext import commands
 
+# Selenium; automating search tool
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-
-import time
-
+from selenium.common.exceptions import NoSuchElementException
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -32,7 +31,6 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-
 @bot.event
 async def on_ready():
     guild = discord.utils.get(bot.guilds, name=SERVER_NAME)
@@ -42,8 +40,8 @@ async def on_ready():
         f"{guild.name}  <->  (id: {guild.id})"
     )
 
-    members = "\n - ".join([member.name for member in guild.members])
-    print(f"Guild Members:\n - {members}")
+    # members = "\n - ".join([member.name for member in guild.members])
+    # print(f"Guild Members:\n - {members}")
 
 
 @bot.event
@@ -61,7 +59,7 @@ async def generate_copypasta(ctx):
 
 @bot.command(name="uwufy", help="Uwufies most recent message before calling this")
 async def uwufy_text(ctx):
-    emoticons = ["(✿◠‿◠)", "(─‿‿─)", "(≧◡≦)", "≧◠◡◠≦✌", "✿◕ ‿ ◕✿", "≧'◡'≦"]
+    emoticons = ["(✿◠‿◠)", "(─‿‿─)", "(≧◡≦)", "≧◠◡◠≦✌", "✿◕ ‿ ◕✿", "≧'◡'≦", "(─‿‿─)♡", "(*^.^*)"]
 
     channel = ctx.channel
     messages = [message async for message in channel.history(limit=5)]
@@ -107,41 +105,66 @@ async def uwufy_text(ctx):
 
 
 # Searches up images with specific tags on danbooru
-@bot.command(name="danbooru", help="Gets a random image from danbooru")
-async def danbooru_search(ctx, tag1=None):
+@bot.command(
+    name="booru",
+    help="Gets a random image from safebooru; Recommend using -booru tags",
+)
+async def danbooru_search(ctx, *, tags=None):
+    last_message = await ctx.send("Generating your image ⚪ ⚪ ⚪")
+
     options = Options()
     options.binary_location = (
         "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
     )
+    options.add_argument("--headless")
     options.add_experimental_option("detach", True)
     options.add_argument("--incognito")
 
     driver = webdriver.Chrome(options=options)  # driver is the browser
-    time.sleep(2)
-    driver.get("https://danbooru.donmai.us/")
+    driver.get("https://safebooru.org/")
+
+    await last_message.edit(content="Generating your image ⚫ ⚪ ⚪")
 
     # Now find the search bar, input and search according to fields
-    elem = driver.find_element(By.NAME, "tags")
+    try:
+        elem = driver.find_element(By.NAME, "tags")
+    except NoSuchElementException:
+        await last_message.delete()
+        await ctx.send("Can't find any images, the booru servers may be down (;﹏;)")
 
-    tags = ""
-    if tag1 != None:
-        tags += tag1
+    if tags != None:
+        # Formatting
+        tags = tags.strip()
+        tags = tags.replace(", ", ",")
+        tags = tags.replace(" ", "_")
+        tags = tags.replace(",", " ")
+        # print(f'/{tags}/')
 
-    # Formatting
-    tags = tags.strip()
-    tags.replace(", ", ",")
-    tags.replace(" ", "_")
-    tags.replace(",", " ")
     elem.send_keys(tags + Keys.RETURN)
-    # look for post, then open site, then send image
-    # driver.quit()
+    elems = driver.find_elements(By.CLASS_NAME, "preview")
+    if not elems:
+        await last_message.delete()
+        await ctx.send("Sowwy, I can't find any tags for what you were looking for （>﹏<）")
 
+    await last_message.edit(content="Generating your image ⚫ ⚫ ⚪")
+
+    random.choice(elems).click()
+    # Now in the post
+    img = driver.find_element(By.ID, "image")
+
+    await last_message.edit(content="Generating your image ⚫ ⚫ ⚫")
+
+    src = img.get_attribute("src")
+    driver.quit()
+
+    await ctx.send(src)
+    await last_message.delete()
 
 # Recognises specific keyword from message and responds
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
-    league_call = ["league", "leeg", "lego"]
+    league_call = ["leeg", "lego"]
     jg_call = [
         "jungle diff",
         "jg diff",
@@ -169,10 +192,11 @@ async def on_message(message):
         ]
         await message.channel.send(random.choice(league_references))
     if "genus" in message.content.lower():
-        await message.channel.send("um akshually, that's genius pell \U0001F913")
+        await message.channel.send("pell \U0001F913")
     if "peter" in message.content.lower():
         await message.channel.send("技术问题")
-
+    if "cook" in message.content.lower():
+        await message.channel.send("Let him cook 🧑‍🍳")
     if message.content.lower() == "riot":
         await message.delete()
         with open("img/RIOT.gif", "rb") as f:
