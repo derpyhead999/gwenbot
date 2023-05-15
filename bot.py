@@ -260,7 +260,6 @@ async def danbooru_search(ctx, *, tags=""):
 # Recognises specific keyword from message and responds
 @bot.event
 async def on_message(message):
-    await bot.process_commands(message)
     league_call = ["leeg", "lego"]
     jg_call = [
         "jungle diff",
@@ -335,6 +334,14 @@ async def on_message(message):
         with open("img/promote.png", "rb") as f:
             picture = discord.File(f)
             await message.channel.send(file=picture)
+    await bot.process_commands(message)
+
+
+@bot.command(name="quit-operation")
+@commands.is_owner()
+async def quit(ctx):
+    await ctx.send("Shutting down the bot")
+    bot.close()
 
 
 @bot.event
