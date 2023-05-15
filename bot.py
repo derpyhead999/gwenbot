@@ -33,6 +33,7 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
+
 @bot.event
 async def on_ready():
     guild = discord.utils.get(bot.guilds, name=SERVER_NAME)
@@ -61,7 +62,16 @@ async def generate_copypasta(ctx):
 
 @bot.command(name="uwufy", help="Uwufies most recent message before calling this")
 async def uwufy_text(ctx):
-    emoticons = ["(✿◠‿◠)", "(─‿‿─)", "(≧◡≦)", "≧◠◡◠≦✌", "✿◕ ‿ ◕✿", "≧'◡'≦", "(─‿‿─)♡", "(*^.^*)"]
+    emoticons = [
+        "(✿◠‿◠)",
+        "(─‿‿─)",
+        "(≧◡≦)",
+        "≧◠◡◠≦✌",
+        "✿◕ ‿ ◕✿",
+        "≧'◡'≦",
+        "(─‿‿─)♡",
+        "(*^.^*)",
+    ]
 
     channel = ctx.channel
     messages = [message async for message in channel.history(limit=5)]
@@ -111,19 +121,34 @@ async def uwufy_text(ctx):
     name="safebooru",
     help="Gets a random image from safebooru; Recommend using -booru tags, with commas between tags",
 )
-async def safebooru_search(ctx, *, tags=''):
+async def safebooru_search(ctx, *, tags=""):
     last_message = await ctx.send("Generating your image ⚪ ⚪ ⚪")
 
     options = Options()
-    options.binary_location = (
-        "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
-    )
+    # options.binary_location = (
+    #     "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
+    # )
+
+    options.add_argument("--disable-extensions")
+    options.binary_location = "./BraveSoftware/Brave-Browser/Application/brave.exe"
     options.add_argument("--headless")
     options.add_experimental_option("detach", True)
     options.add_argument("--incognito")
 
+    options.add_argument("--ignore-certificate-errors")
+    options.add_argument("--allow-running-insecure-content")
+    user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
+    options.add_argument(f"user-agent={user_agent}")
+
     driver = webdriver.Chrome(options=options)  # driver is the browser
     driver.get("https://safebooru.org/")
+
+    if tags != "":
+        # Formatting
+        tags = tags.strip()
+        tags = tags.replace(", ", ",")
+        tags = tags.replace(" ", "_")
+        tags = tags.replace(",", " ")
 
     await last_message.edit(content="Generating your image ⚫ ⚪ ⚪")
 
@@ -134,19 +159,13 @@ async def safebooru_search(ctx, *, tags=''):
         await last_message.delete()
         await ctx.send("Can't find any images, the booru servers may be down (;﹏;)")
 
-    if tags != '':
-        # Formatting
-        tags = tags.strip()
-        tags = tags.replace(", ", ",")
-        tags = tags.replace(" ", "_")
-        tags = tags.replace(",", " ")
-        # print(f'/{tags}/')
-
     elem.send_keys(tags + Keys.RETURN)
     elems = driver.find_elements(By.CLASS_NAME, "preview")
     if not elems:
         await last_message.delete()
-        await ctx.send("Sowwy, I can't find any tags for what you were looking for （>﹏<）")
+        await ctx.send(
+            "Sowwy, I can't find any tags for what you were looking for （>﹏<）"
+        )
 
     await last_message.edit(content="Generating your image ⚫ ⚫ ⚪")
 
@@ -162,40 +181,38 @@ async def safebooru_search(ctx, *, tags=''):
     await ctx.send(src)
     await last_message.delete()
 
+
 # Searches up images with specific tags on safebooru
 @bot.command(
     name="danbooru",
     help="Gets a random image from danbooru; Recommend using -booru tags, with commas between tags; 2 tags max",
 )
-async def danbooru_search(ctx, *, tags=''):
+async def danbooru_search(ctx, *, tags=""):
     if not ctx.channel.nsfw:
         await ctx.send("Horny searches go in nsfw channel! ღゝ◡╹)ノ♡")
         return
     last_message = await ctx.send("Generating your image ⚪ ⚪ ⚪")
 
     options = Options()
-    options.binary_location = (
-        "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
-    )
+    # options.binary_location = (
+    #     "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
+    # )
+
+    options.add_argument("--disable-extensions")
+    options.binary_location = "./BraveSoftware/Brave-Browser/Application/brave.exe"
     options.add_argument("--headless")
     options.add_experimental_option("detach", True)
     options.add_argument("--incognito")
 
+    options.add_argument("--ignore-certificate-errors")
+    options.add_argument("--allow-running-insecure-content")
+    user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
+    options.add_argument(f"user-agent={user_agent}")
+
     driver = webdriver.Chrome(options=options)  # driver is the browser
     driver.get("https://danbooru.donmai.us/")
 
-    await last_message.edit(content="Generating your image ⚫ ⚪ ⚪")
-
-    # Now find the search bar, input and search according to fields
-    try:
-        print(driver.find_element(By.NAME, "tags"))
-        elem = driver.find_element(By.NAME, "tags")
-        # elem.send_keys(tags + Keys.RETURN)
-    except NoSuchElementException:
-        await last_message.delete()
-        await ctx.send("Can't find any images, the booru servers may be down (;﹏;)")
-
-    if tags != '':
+    if tags != "":
         # Formatting
         tags = tags.strip()
         tags = tags.replace(", ", ",")
@@ -203,15 +220,27 @@ async def danbooru_search(ctx, *, tags=''):
         tags = tags.replace(",", " ")
         if len(tags.split()) > 2:
             await last_message.delete()
-            await ctx.send("Too many tags; only 2 max! (Make sure to put comments between tags) (Too poor 4 more) -`д´-")
+            await ctx.send(
+                "Too many tags; only 2 max! (Make sure to put comments between tags) (Too poor 4 more) -`д´-"
+            )
 
-        # print(f'/{tags}/')
-    print('here')
+    await last_message.edit(content="Generating your image ⚫ ⚪ ⚪")
+
+    # Now find the search bar, input and search according to fields
+    try:
+        elem = driver.find_element(By.NAME, "tags")
+    except NoSuchElementException:
+        await last_message.delete()
+        await ctx.send("Can't find any images, the booru servers may be down (;﹏;)")
+
+    # elem.send_keys(tags + Keys.RETURN)
     elem.send_keys(tags + Keys.RETURN)
     elems = driver.find_elements(By.CLASS_NAME, "post-preview-image")
     if not elems:
         await last_message.delete()
-        await ctx.send("Sowwy, I can't find any tags for what you were looking for （>﹏<）")
+        await ctx.send(
+            "Sowwy, I can't find any tags for what you were looking for （>﹏<）"
+        )
 
     await last_message.edit(content="Generating your image ⚫ ⚫ ⚪")
 
@@ -226,6 +255,7 @@ async def danbooru_search(ctx, *, tags=''):
 
     await ctx.send(src)
     await last_message.delete()
+
 
 # Recognises specific keyword from message and responds
 @bot.event
