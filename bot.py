@@ -129,6 +129,7 @@ async def safebooru_search(ctx, *, tags=""):
     #     "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
     # )
 
+    options.add_argument("--window-size=1920,1080")
     options.add_argument("--disable-extensions")
     # options.binary_location = "./BraveSoftware/Brave-Browser/Application/brave.exe"
     options.add_argument("--headless")
@@ -198,6 +199,7 @@ async def danbooru_search(ctx, *, tags=""):
     #     "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
     # )
 
+    options.add_argument("--window-size=1920,1080")
     options.add_argument("--disable-extensions")
     # options.binary_location = "./BraveSoftware/Brave-Browser/Application/brave.exe"
     options.add_argument("--headless")
