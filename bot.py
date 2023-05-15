@@ -139,7 +139,7 @@ async def safebooru_search(ctx, *, tags=""):
 
     options.add_argument("--disable-extensions")
     # options.binary_location = "./BraveSoftware/Brave-Browser/Application/brave.exe"
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
     options.add_experimental_option("detach", True)
     options.add_argument("--incognito")
 
