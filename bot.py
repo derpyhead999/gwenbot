@@ -124,13 +124,13 @@ async def uwufy_text(ctx):
 async def safebooru_search(ctx, *, tags=""):
     last_message = await ctx.send("Generating your image ⚪ ⚪ ⚪")
 
-    options = Options()
+    options = webdriver.ChromeOptions()
     # options.binary_location = (
     #     "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
     # )
 
     options.add_argument("--disable-extensions")
-    options.binary_location = "./BraveSoftware/Brave-Browser/Application/brave.exe"
+    # options.binary_location = "./BraveSoftware/Brave-Browser/Application/brave.exe"
     options.add_argument("--headless")
     options.add_experimental_option("detach", True)
     options.add_argument("--incognito")
@@ -164,7 +164,7 @@ async def safebooru_search(ctx, *, tags=""):
     if not elems:
         await last_message.delete()
         await ctx.send(
-            "Sowwy, I can't find any tags for what you were looking for （>﹏<）"
+            "Sowwy, I can't find any tags for what you were looking for （>﹏<）; try use booru tags!"
         )
 
     await last_message.edit(content="Generating your image ⚫ ⚫ ⚪")
@@ -193,13 +193,13 @@ async def danbooru_search(ctx, *, tags=""):
         return
     last_message = await ctx.send("Generating your image ⚪ ⚪ ⚪")
 
-    options = Options()
+    options = webdriver.ChromeOptions()
     # options.binary_location = (
     #     "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
     # )
 
     options.add_argument("--disable-extensions")
-    options.binary_location = "./BraveSoftware/Brave-Browser/Application/brave.exe"
+    # options.binary_location = "./BraveSoftware/Brave-Browser/Application/brave.exe"
     options.add_argument("--headless")
     options.add_experimental_option("detach", True)
     options.add_argument("--incognito")
@@ -239,7 +239,7 @@ async def danbooru_search(ctx, *, tags=""):
     if not elems:
         await last_message.delete()
         await ctx.send(
-            "Sowwy, I can't find any tags for what you were looking for （>﹏<）"
+            "Sowwy, I can't find any tags for what you were looking for （>﹏<）; try use booru tags!"
         )
 
     await last_message.edit(content="Generating your image ⚫ ⚫ ⚪")
