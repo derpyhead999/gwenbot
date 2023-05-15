@@ -139,7 +139,7 @@ async def safebooru_search(ctx, *, tags=""):
 
     options.add_argument("--disable-extensions")
     # options.binary_location = "./BraveSoftware/Brave-Browser/Application/brave.exe"
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
     options.add_experimental_option("detach", True)
     options.add_argument("--incognito")
 
@@ -147,7 +147,7 @@ async def safebooru_search(ctx, *, tags=""):
     options.add_argument("--allow-running-insecure-content")
     user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
     options.add_argument(f"user-agent={user_agent}")
-    options.add_experimental_option("androidPackage", "com.android.chrome")
+    # options.add_experimental_option("androidPackage", "com.android.chrome")
     driver = webdriver.Chrome(options=options)  # driver is the browser
     driver.get("https://safebooru.org/")
 
