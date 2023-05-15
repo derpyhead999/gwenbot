@@ -18,6 +18,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 
+import time
+
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 SERVER_NAME = os.getenv("DISCORD_SERVER_NAME")
@@ -104,12 +106,12 @@ async def uwufy_text(ctx):
 # async def stable_diff_generate(ctx):
 
 
-# Searches up images with specific tags on danbooru
+# Searches up images with specific tags on safebooru
 @bot.command(
-    name="booru",
-    help="Gets a random image from safebooru; Recommend using -booru tags",
+    name="safebooru",
+    help="Gets a random image from safebooru; Recommend using -booru tags, with commas between tags",
 )
-async def danbooru_search(ctx, *, tags=None):
+async def safebooru_search(ctx, *, tags=''):
     last_message = await ctx.send("Generating your image ⚪ ⚪ ⚪")
 
     options = Options()
@@ -132,7 +134,7 @@ async def danbooru_search(ctx, *, tags=None):
         await last_message.delete()
         await ctx.send("Can't find any images, the booru servers may be down (;﹏;)")
 
-    if tags != None:
+    if tags != '':
         # Formatting
         tags = tags.strip()
         tags = tags.replace(", ", ",")
@@ -142,6 +144,71 @@ async def danbooru_search(ctx, *, tags=None):
 
     elem.send_keys(tags + Keys.RETURN)
     elems = driver.find_elements(By.CLASS_NAME, "preview")
+    if not elems:
+        await last_message.delete()
+        await ctx.send("Sowwy, I can't find any tags for what you were looking for （>﹏<）")
+
+    await last_message.edit(content="Generating your image ⚫ ⚫ ⚪")
+
+    random.choice(elems).click()
+    # Now in the post
+    img = driver.find_element(By.ID, "image")
+
+    await last_message.edit(content="Generating your image ⚫ ⚫ ⚫")
+
+    src = img.get_attribute("src")
+    driver.quit()
+
+    await ctx.send(src)
+    await last_message.delete()
+
+# Searches up images with specific tags on safebooru
+@bot.command(
+    name="danbooru",
+    help="Gets a random image from danbooru; Recommend using -booru tags, with commas between tags; 2 tags max",
+)
+async def danbooru_search(ctx, *, tags=''):
+    if not ctx.channel.nsfw:
+        await ctx.send("Horny searches go in nsfw channel! ღゝ◡╹)ノ♡")
+        return
+    last_message = await ctx.send("Generating your image ⚪ ⚪ ⚪")
+
+    options = Options()
+    options.binary_location = (
+        "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
+    )
+    options.add_argument("--headless")
+    options.add_experimental_option("detach", True)
+    options.add_argument("--incognito")
+
+    driver = webdriver.Chrome(options=options)  # driver is the browser
+    driver.get("https://danbooru.donmai.us/")
+
+    await last_message.edit(content="Generating your image ⚫ ⚪ ⚪")
+
+    # Now find the search bar, input and search according to fields
+    try:
+        print(driver.find_element(By.NAME, "tags"))
+        elem = driver.find_element(By.NAME, "tags")
+        # elem.send_keys(tags + Keys.RETURN)
+    except NoSuchElementException:
+        await last_message.delete()
+        await ctx.send("Can't find any images, the booru servers may be down (;﹏;)")
+
+    if tags != '':
+        # Formatting
+        tags = tags.strip()
+        tags = tags.replace(", ", ",")
+        tags = tags.replace(" ", "_")
+        tags = tags.replace(",", " ")
+        if len(tags.split()) > 2:
+            await last_message.delete()
+            await ctx.send("Too many tags; only 2 max! (Make sure to put comments between tags) (Too poor 4 more) -`д´-")
+
+        # print(f'/{tags}/')
+    print('here')
+    elem.send_keys(tags + Keys.RETURN)
+    elems = driver.find_elements(By.CLASS_NAME, "post-preview-image")
     if not elems:
         await last_message.delete()
         await ctx.send("Sowwy, I can't find any tags for what you were looking for （>﹏<）")
