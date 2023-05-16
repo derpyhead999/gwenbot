@@ -290,8 +290,16 @@ async def on_message(message):
         return
     if "stupid" in message.content.lower():
         await message.channel.send("stoopid")
-    if "valorant" in message.content.lower():
-        valorant_references = ["poggers", "least clutch nyoos momento"]
+    if "clash" in message.content.lower():
+        await message.channel.send(
+            "8:00pm Start? ✅\n2 Malders? ✅\n2 Griefers? ✅\n'Idc last game Ionia comp'? ✅\n⭕ ❌ ❌? ✅\nYep that's clash ✅"
+        )
+    if "valo" in message.content.lower():
+        valorant_references = [
+            "poggers",
+            "least clutch nyoos momento",
+            "I've seen APersonOnEarth play, he doesn't even use a monitor. He visualizes the map in a detailed rendering, completely in his mind. He has a biological wallhack; his godlike perception highlights all enemies within light-years. His eyes are closed as his mouse gracefully swerves across the table, making immaculate twitches as he flicks from head to head. The bullets that escape his gun barrel are surgical; each making a deadly strike in between his opponent's eyes.",
+        ]
         await message.channel.send(random.choice(valorant_references))
     if any([x in message.content.lower() for x in league_call]):
         league_references = [
