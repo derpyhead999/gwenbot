@@ -37,6 +37,8 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 @bot.event
 async def on_ready():
     guild = discord.utils.get(bot.guilds, name=SERVER_NAME)
+    channel = discord.utils.get(guild.text_channels, name="general")
+    # await channel.send("Gwen is booted up!")
 
     print(
         f"{bot.user.name} is connected to the following guild:\n"
@@ -358,14 +360,20 @@ async def on_message(message):
         with open("img/promote.png", "rb") as f:
             picture = discord.File(f)
             await message.channel.send(file=picture)
+    if "flush" in message.content.lower():
+        with open("img/flush.png", "rb") as f:
+            picture = discord.File(f)
+            await message.channel.send(file=picture)
     await bot.process_commands(message)
 
 
-@bot.command(name="quit-operation")
+@bot.command(name="quit")
 @commands.is_owner()
 async def quit(ctx):
-    await ctx.send("Shutting down the bot")
-    bot.close()
+    guild = discord.utils.get(bot.guilds, name=SERVER_NAME)
+    channel = discord.utils.get(guild.text_channels, name="general")
+    # await channel.send("Gwen needs a break; will be hopping back on soon!")
+    await bot.close()
 
 
 @bot.event
