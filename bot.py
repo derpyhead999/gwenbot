@@ -18,12 +18,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 
-import time
+# import time
+# RIOT imports
+import urllib.request, json
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 SERVER_NAME = os.getenv("DISCORD_SERVER_NAME")
-
+RIOT_API_KEY = os.getenv("RIOT_API_KEY")
 
 intents = discord.Intents.default()
 intents.members = True
@@ -31,13 +33,15 @@ intents.message_content = True
 
 # client = discord.Client(intents=intents)
 
-bot = commands.Bot(command_prefix="!", intents=intents)
+help_command = commands.DefaultHelpCommand(no_category="Commands")
+bot = commands.Bot(command_prefix="!", intents=intents, help_command=help_command)
 
 
+# Confirms successful bot startup
 @bot.event
 async def on_ready():
     guild = discord.utils.get(bot.guilds, name=SERVER_NAME)
-    channel = discord.utils.get(guild.text_channels, name="general")
+    # channel = discord.utils.get(guild.text_channels, name="general")
     # await channel.send("Gwen is booted up!")
 
     print(
@@ -49,6 +53,7 @@ async def on_ready():
     # print(f"Guild Members:\n - {members}")
 
 
+# Sends message on user join
 @bot.event
 async def on_member_join(member):
     guild = member.guild
@@ -56,12 +61,14 @@ async def on_member_join(member):
     await channel.send(f"Hontouni poggers, {member.name}! Welcome to {SERVER_NAME}!")
 
 
+# Generates a random copypasta from a list of stored copypastas
 @bot.command(name="copypasta", help="Gives you a random copypasta")
 async def generate_copypasta(ctx):
     response = random.choice(copypastas)
     await ctx.send(response)
 
 
+# Uwufies the previous text
 @bot.command(name="uwufy", help="Uwufies most recent message before calling this")
 async def uwufy_text(ctx):
     emoticons = [
@@ -112,10 +119,6 @@ async def uwufy_text(ctx):
 
     output_text += f" {random.choice(emoticons)}"
     await ctx.send(output_text)
-
-
-# @bot.command(name='everythingv3', help='Generates an image based on AI stable diffusion model "everythingv3"')
-# async def stable_diff_generate(ctx):
 
 
 # Searches up images with specific tags on safebooru
@@ -275,6 +278,31 @@ async def danbooru_search(ctx, *, tags=""):
     await last_message.delete()
 
 
+# Returns a list of information about a user
+@bot.command(
+    name="info",
+    help="!info [user] [option] :Returns a list of information based on specific user input",
+)
+async def user_info(
+    ctx,
+    user: str = commands.parameter(default="", description="A summoner name"),
+    option: str = commands.parameter(default="", description="Rank / Mastery"),
+):
+    if user == "":
+        await ctx.send("Please provide a summoner name!")
+    elif option == "":
+        await ctx.send("Please ask for rank / mastery!")
+    with urllib.request.urlopen(
+        "https://ddragon.leagueoflegends.com/cdn/13.9.1/data/en_US/champion.json"
+    ) as url:
+        data = json.load(url)
+        print(data)
+        await ctx.send("test")
+
+
+# quote command
+
+
 # Recognises specific keyword from message and responds
 @bot.event
 async def on_message(message):
@@ -367,11 +395,20 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
+# @bot.command(name="Help", description="Returns all commands available")
+# async def help(ctx):
+#     helptext = "```"
+#     for command in bot.commands:
+#         helptext += f"{command}\n"
+#     helptext += "```"
+#     await ctx.send(helptext)
+
+
 @bot.command(name="quit")
 @commands.is_owner()
 async def quit(ctx):
-    guild = discord.utils.get(bot.guilds, name=SERVER_NAME)
-    channel = discord.utils.get(guild.text_channels, name="general")
+    # guild = discord.utils.get(bot.guilds, name=SERVER_NAME)
+    # channel = discord.utils.get(guild.text_channels, name="general")
     # await channel.send("Gwen needs a break; will be hopping back on soon!")
     await bot.close()
 
