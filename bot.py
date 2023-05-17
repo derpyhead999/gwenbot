@@ -292,11 +292,12 @@ async def user_info(
         await ctx.send("Please provide a summoner name!")
     elif option == "":
         await ctx.send("Please ask for rank / mastery!")
+
     with urllib.request.urlopen(
         "https://ddragon.leagueoflegends.com/cdn/13.9.1/data/en_US/champion.json"
     ) as url:
-        data = json.load(url)
-        print(data)
+        json_obj = json.load(url)
+        json_obj.data
         await ctx.send("test")
 
 
