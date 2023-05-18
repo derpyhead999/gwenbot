@@ -129,7 +129,7 @@ async def uwufy_text(ctx):
     help="Gets a random image from safebooru; Recommend using -booru tags, with commas between tags",
 )
 async def safebooru_search(ctx, *, tags=""):
-    last_message = await ctx.send("Generating your image ⚪ ⚪ ⚪")
+    last_message = await ctx.send("Generating your image; just wait a min~~")
 
     options = webdriver.ChromeOptions()
     # options.binary_location = (
@@ -165,8 +165,6 @@ async def safebooru_search(ctx, *, tags=""):
         tags = tags.replace(" ", "_")
         tags = tags.replace(",", " ")
 
-    await last_message.edit(content="Generating your image ⚫ ⚪ ⚪")
-
     # Now find the search bar, input and search according to fields
     try:
         elem = driver.find_element(By.NAME, "tags")
@@ -182,13 +180,9 @@ async def safebooru_search(ctx, *, tags=""):
             "Sowwy, I can't find any tags for what you were looking for （>﹏<）; try use booru tags!"
         )
 
-    await last_message.edit(content="Generating your image ⚫ ⚫ ⚪")
-
     random.choice(elems).click()
     # Now in the post
     img = driver.find_element(By.ID, "image")
-
-    await last_message.edit(content="Generating your image ⚫ ⚫ ⚫")
 
     src = img.get_attribute("src")
     driver.quit()
@@ -206,7 +200,7 @@ async def danbooru_search(ctx, *, tags=""):
     if not ctx.channel.nsfw:
         await ctx.send("Horny searches go in nsfw channel! ღゝ◡╹)ノ♡")
         return
-    last_message = await ctx.send("Generating your image ⚪ ⚪ ⚪")
+    last_message = await ctx.send("Generating your image; just wait a min~~")
 
     options = webdriver.ChromeOptions()
     # options.binary_location = (
@@ -247,8 +241,6 @@ async def danbooru_search(ctx, *, tags=""):
                 "Too many tags; only 2 max! (Make sure to put comments between tags) (Too poor 4 more) -`д´-"
             )
 
-    await last_message.edit(content="Generating your image ⚫ ⚪ ⚪")
-
     # Now find the search bar, input and search according to fields
     try:
         elem = driver.find_element(By.NAME, "tags")
@@ -265,13 +257,9 @@ async def danbooru_search(ctx, *, tags=""):
             "Sowwy, I can't find any tags for what you were looking for （>﹏<）; try use booru tags!"
         )
 
-    await last_message.edit(content="Generating your image ⚫ ⚫ ⚪")
-
     random.choice(elems).click()
     # Now in the post
     img = driver.find_element(By.ID, "image")
-
-    await last_message.edit(content="Generating your image ⚫ ⚫ ⚫")
 
     src = img.get_attribute("src")
     driver.quit()
