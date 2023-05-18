@@ -300,7 +300,7 @@ async def user_info(
             )
         return
 
-    if "rank" == option.lower():
+    if "rank" in option.lower():
         ranked_stats: list = lol_watcher.league.by_summoner(region, user_found["id"])
         await ctx.send(f"League of legends ranked stats for {user} : ღゝ◡╹ )ノ♡\n")
         for item in ranked_stats:
