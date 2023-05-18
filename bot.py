@@ -20,7 +20,9 @@ from selenium.common.exceptions import NoSuchElementException
 
 # import time
 # RIOT imports
-import urllib.request, json
+from urllib.request import urlopen
+import json
+from riotwatcher import LolWatcher, ApiError
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -289,16 +291,72 @@ async def user_info(
     option: str = commands.parameter(default="", description="Rank / Mastery"),
 ):
     if user == "":
-        await ctx.send("Please provide a summoner name!")
+        await ctx.send(
+            "Please provide a summoner name! Please format like so: !info [user] [rank/mastery]"
+        )
+        return
     elif option == "":
-        await ctx.send("Please ask for rank / mastery!")
+        await ctx.send(
+            "Please ask for rank / mastery! Please format like so: !info [user] [rank/mastery]"
+        )
+        return
+    lol_watcher = LolWatcher(RIOT_API_KEY)
+    region = "oc1"
 
-    with urllib.request.urlopen(
-        "https://ddragon.leagueoflegends.com/cdn/13.9.1/data/en_US/champion.json"
-    ) as url:
-        json_obj = json.load(url)
-        json_obj.data
-        await ctx.send("test")
+    try:
+        user_found: dict = lol_watcher.summoner.by_name(region, user)
+    except ApiError as err:
+        if err.response.status_code == 404:
+            await ctx.send(
+                "Sorry, I can't find that summoner! Please format like so: !info [user] [rank/mastery]"
+            )
+        return
+
+    if "rank" == option.lower():
+        ranked_stats: list = lol_watcher.league.by_summoner(region, user_found["id"])
+        await ctx.send(f"League of legends ranked stats for {user} : ღゝ◡╹ )ノ♡\n")
+        for item in ranked_stats:
+            await ctx.send(
+                f"Your rank for {item['queueType']} is {item['tier']} {item['rank']} {item['leaguePoints']} LP\n\t-Wins: {item['wins']}\n\t-Losses: {item['losses']}\n"
+            )
+        await ctx.send("You're doing great! 👍")
+    elif "mastery" == option.lower():
+        mastery_stats: list = lol_watcher.champion_mastery.by_summoner(
+            region, user_found["id"]
+        )
+        response = urlopen(
+            "https://ddragon.leagueoflegends.com/cdn/13.9.1/data/en_US/champion.json"
+        )
+        data_json = json.load(response)
+        champ_data: dict = data_json["data"]
+        await ctx.send(
+            f"League of legends mastery stats for {user}:\nHere are your top 5 mastery champions! ღゝ◡╹ )ノ♡\n"
+        )
+        count = 0
+        for item in mastery_stats[:5]:
+            champ_arr = [
+                str(key)
+                for key, props in champ_data.items()
+                if int(props["key"]) == item["championId"]
+            ]
+            mastery_points = item["championPoints"]
+            await ctx.send(
+                f"{champ_arr[0]}:\n\t-Champion Level: {item['championLevel']}\n\t-Mastery Points: {mastery_points}\n"
+            )
+            count += mastery_points
+
+        if count > 1000000:
+            await ctx.send(
+                "*"
+                + "Wow...so your favourite hobbies are 'smurfing on noobs' and 'climbing out of pisslow'..."
+                + "*"
+            )
+        elif count > 500000:
+            await ctx.send("'You know, I'm something of a league addict myself.'")
+        elif count > 100000:
+            await ctx.send("*" + "It's an on and off relationship eh?" + "*")
+        elif count > 0:
+            await ctx.send("Congrats! You're a functional human being! 🎂")
 
 
 # quote command
@@ -344,6 +402,10 @@ async def on_message(message):
         await message.channel.send(random.choice(league_references))
     if "genus" in message.content.lower():
         await message.channel.send("pell \U0001F913")
+    if "based" in message.content.lower():
+        await message.channel.send(
+            "Based? Based on what? In your dick? Please shut the fuck up and use words properly you fuckin troglodyte, do you think God gave us a freedom of speech just to spew random words that have no meaning that doesn't even correllate to the topic of the conversation? Like please you always complain about why no one talks to you or no one expresses their opinions on you because you're always spewing random shit like poggers based cringe and when you try to explain what it is and you just say that it's funny like what? What the fuck is funny about that do you think you'll just become a stand-up comedian that will get a standing ovation just because you said 'cum' in the stage? HELL NO YOU FUCKIN IDIOT, so please shut the fuck up and use words properly you dumb bitch"
+        )
     if "peter" in message.content.lower():
         await message.channel.send("技术问题")
     if "cook" in message.content.lower():
