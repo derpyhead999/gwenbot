@@ -363,6 +363,7 @@ async def on_message(message):
         "jungle gap",
     ]
     cope_call = ["copium", "cope", "overdose", "overdosing", "coping"]
+    sadge_call = ["saj", "sadge", "rip"]
     if message.author == bot.user:
         return
     if "stupid" in message.content.lower():
@@ -441,6 +442,14 @@ async def on_message(message):
             await message.channel.send(file=picture)
     if "flush" in message.content.lower():
         with open("img/flush.png", "rb") as f:
+            picture = discord.File(f)
+            await message.channel.send(file=picture)
+    if "madge" in message.content.lower():
+        with open("img/madge.png", "rb") as f:
+            picture = discord.File(f)
+            await message.channel.send(file=picture)
+    if any([x in message.content.lower() for x in sadge_call]):
+        with open("img/sadge.png", "rb") as f:
             picture = discord.File(f)
             await message.channel.send(file=picture)
     await bot.process_commands(message)
