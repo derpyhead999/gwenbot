@@ -79,7 +79,13 @@ async def reload(ctx, extension: str):
         await ctx.send(embed=embed)
 
 
-initial_extensions = ["cogs.message", "cogs.search", "cogs.uwufy", "cogs.user"]
+initial_extensions = [
+    "cogs.message",
+    "cogs.search",
+    "cogs.uwufy",
+    "cogs.user",
+    "cogs.music",
+]
 
 
 @bot.event
