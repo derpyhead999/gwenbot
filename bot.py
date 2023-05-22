@@ -58,8 +58,8 @@ async def on_command_error(ctx, error):
 
 @bot.command()
 @commands.is_owner()
-async def reload(ctx, extension: str):
-    if extension.lower() == "all":
+async def reload(ctx, extension: str = ""):
+    if not extension or extension.lower() == "all":
         for ext in initial_extensions:
             await bot.reload_extension(ext)
         embed = discord.Embed(

@@ -1,14 +1,13 @@
 import discord
-from discord.ext import commands, tasks
-import os
-from dotenv import load_dotenv
+from discord.ext import commands
 import youtube_dl
 import asyncio
+import random
+import time
 
-youtube_dl.utils.bug_reports_message = lambda: ""
-
-ytdl_format_options = {
+ytdlopts = {
     "format": "bestaudio/best",
+    "outtmpl": "downloads/%(extractor)s-%(id)s-%(title)s.%(ext)s",
     "restrictfilenames": True,
     "noplaylist": True,
     "nocheckcertificate": True,
@@ -17,32 +16,15 @@ ytdl_format_options = {
     "quiet": True,
     "no_warnings": True,
     "default_search": "auto",
-    "source_address": "0.0.0.0",  # bind to ipv4 since ipv6 addresses cause issues sometimes
+    "source_address": "0.0.0.0",
+    "force-ipv4": True,
+    "preferredcodec": "mp3",
+    "cachedir": False,
 }
 
 ffmpeg_options = {"options": "-vn"}
 
-ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
-
-
-class YTDLSource(discord.PCMVolumeTransformer):
-    def __init__(self, source, *, data, volume=0.5):
-        super().__init__(source, volume)
-        self.data = data
-        self.title = data.get("title")
-        self.url = ""
-
-    @classmethod
-    async def from_url(cls, url, *, loop=None, stream=False):
-        loop = loop or asyncio.get_event_loop()
-        data = await loop.run_in_executor(
-            None, lambda: ytdl.extract_info(url, download=not stream)
-        )
-        if "entries" in data:
-            # take first item from a playlist
-            data = data["entries"][0]
-        filename = data["title"] if stream else ytdl.prepare_filename(data)
-        return filename
+ytdl = youtube_dl.YoutubeDL(ytdlopts)
 
 
 class MusicCog(commands.Cog):
@@ -50,15 +32,31 @@ class MusicCog(commands.Cog):
         self.bot = bot
 
     @commands.command(name="join", help="Tells the bot to join the voice channel")
-    async def join(self, ctx, channel: discord.VoiceChannel):
+    async def join_call(self, ctx):
         if not ctx.message.author.voice:
             await ctx.send(
                 "{} is not connected to a voice channel".format(ctx.message.author.name)
             )
             return
-        # elif ctx.voice_client is not None:
-        #     return await ctx.voice_client.move_to(channel)
-        await channel.connect()
+        else:
+            channel = ctx.message.author.voice.channel
+        voice = await channel.connect()
+        voice.source = discord.PCMVolumeTransformer(voice.source, volume=0.3)
+        # try:
+        #   voice_channel = (
+        #     ctx.author.voice.channel
+        #   )  # checking if user is in a voice channel
+        # except AttributeError:
+        #   return await ctx.send(
+        #     "No channel to join. Make sure you are in a voice channel."
+        #   )  # member is not in a voice channel
+
+        # permissions = voice_channel.permissions_for(ctx.me)
+        # if not permissions.connect or not permissions.speak:
+        #   await ctx.send(
+        #     "I don't have permission to join or speak in that voice channel."
+        #   )
+        #   return
 
     @commands.command(name="leave", help="To make the bot leave the voice channel")
     async def leave(self, ctx):
@@ -68,20 +66,36 @@ class MusicCog(commands.Cog):
         else:
             await ctx.send("The bot is not connected to a voice channel.")
 
-    @commands.command(name="play_song", help="To play song")
+    @commands.command(name="play", help="To play song")
     async def play(self, ctx, url):
-        try:
-            server = ctx.message.guild
-            voice_channel = server.voice_client
+        time.sleep(0.5)
 
-            async with ctx.typing():
-                filename = await YTDLSource.from_url(url, loop=self.bot.loop)
-                voice_channel.play(
-                    discord.FFmpegPCMAudio(executable="ffmpeg.exe", source=filename)
+        voice_client = ctx.guild.voice_client
+        loop = asyncio.get_event_loop()
+        data = await loop.run_in_executor(
+            None, lambda: ytdl.extract_info(url=url, download=False)
+        )  # extracting the info and not downloading the source
+
+        title = data["title"]  # getting the title
+        song = data["url"]  # getting the url
+
+        if "entries" in data:  # checking if the url is a playlist or not
+            data = random.choice(
+                data["entries"]
+            )  # if its a playlist, we get the first item of it
+
+            # MAKE LIST FOR QUEUE?
+
+        try:
+            voice_client.play(
+                discord.FFmpegPCMAudio(
+                    source=song, **ffmpeg_options, executable="ffmpeg"
                 )
-            await ctx.send("**Now playing:** {}".format(filename))
-        except:
-            await ctx.send("The bot is not connected to a voice channel.")
+            )  # playing the audio
+        except Exception as e:
+            print(e)
+
+        await ctx.send(f"**Now playing:** {title}")  # sending the title of the video
 
     @commands.command(name="pause", help="This command pauses the song")
     async def pause(self, ctx):
@@ -98,7 +112,7 @@ class MusicCog(commands.Cog):
             await voice_client.resume()
         else:
             await ctx.send(
-                "The bot was not playing anything before this. Use play_song command"
+                "The bot was not playing anything before this. Use !play [url] command"
             )
 
     @commands.command(name="stop", help="Stops the song")
