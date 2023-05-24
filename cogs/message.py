@@ -13,7 +13,19 @@ jg_call = [
 ]
 cope_call = ["copium", "cope", "overdose", "overdosing", "coping"]
 sadge_call = ["saj", "sadge", "rip"]
-huh_call = ["cum", "balls", "huh"]
+huh_call = [
+    "cum",
+    "balls",
+    "huh",
+    "dick",
+    "shit",
+    "piss",
+    "bust",
+    "moan",
+    "groan",
+    "hot",
+]
+sett_call = ["flash", "sett", "ult", "cookie"]
 
 league_references = [
     "xdd",
@@ -22,6 +34,7 @@ league_references = [
     "tilt vibes eta 5min in vc \U0001F614",
     "[insert genius pell witty remark on league players]",
     "classico 6 man",
+    "11:58pm",
 ]
 
 
@@ -108,6 +121,14 @@ class MessageCog(commands.Cog):
             with open("img/madge.png", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
+        if "susge" in message.content.lower():
+            with open("img/susge.png", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+        if "nerdge" in message.content.lower():
+            with open("img/nerdge.gif", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
         if any([x in message.content.lower() for x in sadge_call]):
             with open("img/sadge.png", "rb") as f:
                 picture = discord.File(f)
@@ -119,6 +140,16 @@ class MessageCog(commands.Cog):
                 await message.channel.send(file=picture)
         if any([x in message.content.lower() for x in huh_call]):
             with open("img/huh.gif", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+        if any([x in message.content.lower() for x in sett_call]):
+            with open("img/sett.gif", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+                await message.channel.send("?")
+        if message.content.lower() == "5head":
+            await message.delete()
+            with open("img/5head.png", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
 
