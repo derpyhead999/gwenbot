@@ -122,6 +122,11 @@ class MusicCog(commands.Cog):
                     )
                     .execute()
                 )
+                if not search_response:
+                    await ctx.send(
+                        "Couldn't find any related songs! Try use more accurate terms"
+                    )
+                    return
                 video_id = search_response["items"][0]["id"]["videoId"]
                 query = f"https://www.youtube.com/watch?v={video_id}"
 
@@ -179,14 +184,18 @@ class MusicCog(commands.Cog):
         voice_client = ctx.message.guild.voice_client
         if voice_client.is_playing():
             await voice_client.pause()
+            await ctx.send("Gwen has been paused!")
         else:
-            await ctx.send("The bot is not playing anything at the moment.")
+            await ctx.send(
+                "Gwen is not playing anything at the moment. Use !play [url] command"
+            )
 
     @commands.command(name="resume", help="Resumes the song")
     async def resume(self, ctx):
         voice_client = ctx.message.guild.voice_client
         if voice_client.is_paused():
             await voice_client.resume()
+            await ctx.send("Resuming song!")
         else:
             await ctx.send(
                 "The bot was not playing anything before this. Use !play [url] command"
@@ -197,8 +206,11 @@ class MusicCog(commands.Cog):
         voice_client = ctx.message.guild.voice_client
         if voice_client.is_playing():
             await voice_client.stop()
+            await ctx.send("Current song has been cancelled")
         else:
-            await ctx.send("The bot is not playing anything at the moment.")
+            await ctx.send(
+                "Gwen is not playing anything at the moment. Use !play [url] command"
+            )
 
     @commands.command(name="next", help="Gets the name of the next song")
     async def get_song(self, ctx):
@@ -224,10 +236,30 @@ class MusicCog(commands.Cog):
 
     @commands.command(name="queue", help="Displays the entire queue of songs")
     async def show_queue(self, ctx):
-        embed = discord.Embed(title="Queued Songs", color=0x00FFFF)
+        embed = discord.Embed(
+            title="Queued Songs",
+            description="Top of the list is next in queue",
+            color=0x3100F5,
+        )
         for song in self.song_queue:
-            embed.add_field(name=song["title"], inline=False)
+            embed.add_field(name=song["title"], value="", inline=False)
         await ctx.send(embed=embed)
+
+    @commands.command(name="pop", help="Removes the song at the end of the queue")
+    async def pop_song(self, ctx):
+        song = self.song_queue.pop()
+        if not song:
+            await ctx.send("No songs in queue!")
+        title = song["title"]
+        await ctx.send(f"Popped off {title} from the end of the queue!")
+
+    @commands.command(name="remove", help="Removes the upcoming song from the queue")
+    async def remove_song(self, ctx):
+        song = self.song_queue.pop(0)
+        if not song:
+            await ctx.send("No songs in queue!")
+        title = song["title"]
+        await ctx.send(f"Removed the upcoming song {title} from the queue!")
 
 
 async def setup(bot: commands.Cog):
