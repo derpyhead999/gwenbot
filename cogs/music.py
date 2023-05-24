@@ -101,7 +101,6 @@ class MusicCog(commands.Cog):
             await ctx.send("Gwen is not connected to a voice channel!")
             return
         youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
-
         if not query:
             if not self.song_queue:
                 await ctx.send("No songs in queue...")
@@ -162,6 +161,11 @@ class MusicCog(commands.Cog):
 
     @commands.command(name="add", help="Adds a song to the end of the queue")
     async def add_song(self, ctx, query):
+        if not self.song_queue:
+            # If song queue is empty, play song immediately
+            await ctx.invoke(self.bot.get_command("play"), query=query)
+            return
+
         data = await self.loop.run_in_executor(
             None, lambda: ytdl.extract_info(url=query, download=False)
         )  # extracting the info and not downloading the source
@@ -171,6 +175,7 @@ class MusicCog(commands.Cog):
                 data["entries"]
             )  # if its a playlist, we get a random item from it
         title = data["title"]
+
         self.song_queue.append(data)
         await ctx.send(f"Added {title} to the queue!")
 
