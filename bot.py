@@ -15,6 +15,7 @@ load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 SERVER_NAME = os.getenv("DISCORD_SERVER_NAME")
 RIOT_API_KEY = os.getenv("RIOT_API_KEY")
+YOUTUBE_API_KEY = os.getenv("GOOGLE_CLOUD_API_KEY")
 
 # import youtube_dl
 

@@ -4,6 +4,9 @@ import youtube_dl
 import asyncio
 import random
 import time
+import validators
+from bot import YOUTUBE_API_KEY
+from googleapiclient.discovery import build
 
 ytdlopts = {
     "format": "bestaudio/best",
@@ -69,18 +72,12 @@ class MusicCog(commands.Cog):
                 "{} is not connected to a voice channel".format(ctx.message.author.name)
             )
             return
-        else:
-            channel = ctx.message.author.voice.channel
-        await channel.connect()
-
-        # try:
-        #   voice_channel = (
-        #     ctx.author.voice.channel
-        #   )  # checking if user is in a voice channel
-        # except AttributeError:
-        #   return await ctx.send(
-        #     "No channel to join. Make sure you are in a voice channel."
-        #   )  # member is not in a voice channel
+        bot_voice_channel = discord.utils.get(ctx.bot.voice_clients, guild=ctx.guild)
+        voice_channel = ctx.author.voice.channel
+        if bot_voice_channel and bot_voice_channel.is_connected():
+            await bot_voice_channel.move_to(voice_channel)
+            return
+        await voice_channel.connect()
 
         # permissions = voice_channel.permissions_for(ctx.me)
         # if not permissions.connect or not permissions.speak:
@@ -98,20 +95,38 @@ class MusicCog(commands.Cog):
             await ctx.send("The bot is not connected to a voice channel.")
 
     @commands.command(name="play", help="To play song")
-    async def play(self, ctx, url=""):
+    async def play(self, ctx, *, query=""):
         voice_client = ctx.guild.voice_client
         if voice_client == None:
             await ctx.send("Gwen is not connected to a voice channel!")
             return
+        youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
 
-        if not url:
+        if not query:
             if not self.song_queue:
                 await ctx.send("No songs in queue...")
                 return
             data = self.song_queue.pop(0)
         else:
+            # Check if input is a url or simple search term
+            if not validators.url(query):
+                # It is definitely not a link; perform youtube search
+                search_response = (
+                    youtube.search()
+                    .list(
+                        q=query,
+                        part="id,snippet",
+                        maxResults=5,
+                        order="relevance",
+                        type="video",
+                    )
+                    .execute()
+                )
+                video_id = search_response["items"][0]["id"]["videoId"]
+                query = f"https://www.youtube.com/watch?v={video_id}"
+
             data = await self.loop.run_in_executor(
-                None, lambda: ytdl.extract_info(url=url, download=False)
+                None, lambda: ytdl.extract_info(url=query, download=False)
             )  # extracting the info and not downloading the source
 
         if "entries" in data:
@@ -141,9 +156,9 @@ class MusicCog(commands.Cog):
             await ctx.send(f"An error occurred. :pensive:")
 
     @commands.command(name="add", help="Adds a song to the end of the queue")
-    async def add_song(self, ctx, url):
+    async def add_song(self, ctx, query):
         data = await self.loop.run_in_executor(
-            None, lambda: ytdl.extract_info(url=url, download=False)
+            None, lambda: ytdl.extract_info(url=query, download=False)
         )  # extracting the info and not downloading the source
 
         if "entries" in data:  # checking if the url is a playlist or not
@@ -196,6 +211,22 @@ class MusicCog(commands.Cog):
             description="Next Song",
             color=color,
         )
+        embed.add_field(
+            name="Duration", value=self.song_queue[0]["duration"], inline=True
+        )
+        embed.add_field(
+            name="Channel", value=self.song_queue[0]["channel"], inline=True
+        )
+        embed.add_field(
+            name="Views", value=self.song_queue[0]["view_count"], inline=False
+        )
+        await ctx.send(embed=embed)
+
+    @commands.command(name="queue", help="Displays the entire queue of songs")
+    async def show_queue(self, ctx):
+        embed = discord.Embed(title="Queued Songs", color=0x00FFFF)
+        for song in self.song_queue:
+            embed.add_field(name=song["title"], inline=False)
         await ctx.send(embed=embed)
 
 

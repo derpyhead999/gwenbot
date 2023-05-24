@@ -18,7 +18,6 @@ huh_call = [
     "balls",
     "huh",
     "dick",
-    "shit",
     "piss",
     "bust",
     "moan",
