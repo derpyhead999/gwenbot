@@ -98,6 +98,7 @@ class MusicCog(commands.Cog):
     async def play(self, ctx, *, query=""):
         voice_client = ctx.guild.voice_client
         if voice_client == None:
+            print(voice_client)
             await ctx.send("Gwen is not connected to a voice channel!")
             return
         youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
@@ -115,8 +116,7 @@ class MusicCog(commands.Cog):
                     .list(
                         q=query,
                         part="id,snippet",
-                        maxResults=5,
-                        order="relevance",
+                        maxResults=3,
                         type="video",
                     )
                     .execute()
