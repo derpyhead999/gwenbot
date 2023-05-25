@@ -16,7 +16,8 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 SERVER_NAME = os.getenv("DISCORD_SERVER_NAME")
 RIOT_API_KEY = os.getenv("RIOT_API_KEY")
 YOUTUBE_API_KEY = os.getenv("GOOGLE_CLOUD_API_KEY")
-
+DANBOORU_API_KEY = os.getenv("DANBOORU_API_KEY")
+KONACHAN_PASSWORD = os.getenv("KONACHAN_PASSWORD")
 # import youtube_dl
 
 intents = discord.Intents.default()

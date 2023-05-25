@@ -1,6 +1,9 @@
 import discord
 from discord.ext import commands
 import random
+from bot import DANBOORU_API_KEY
+from pybooru import Danbooru, Moebooru
+from bot import KONACHAN_PASSWORD
 
 # Selenium; automating search tool
 from selenium import webdriver
@@ -13,6 +16,50 @@ from selenium.common.exceptions import NoSuchElementException
 class SearchCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command(
+        name="search",
+        help="Searches for posts on danbooru with !search [danbooru/safebooru/lolibooru/konachan/yandere] [Up to 2 fields separated by commas]\nNote that with lolibooru/konachan/yandere, tags are ignored",
+    )
+    async def search(self, ctx, *, tags=""):
+        last_message = await ctx.send("Generating your image; just wait a min~~")
+        tags = tags.split(" ", 1)
+        option = tags[0]
+        if len(tags) == 1:
+            fields = ""
+        else:
+            fields = tags[1]
+
+        if fields != "":
+            # Formatting
+            fields = fields.strip()
+            fields = fields.replace(", ", ",")
+            fields = fields.replace(" ", "_")
+            fields = fields.replace(",", " ")
+            if len(fields.split()) > 2:
+                await last_message.delete()
+                await ctx.send(
+                    "Too many tags; Make sure to put comma's between tags -`д´-"
+                )
+                return
+        if not ctx.channel.nsfw and option != "safebooru":
+            await ctx.send("Horny searches go in nsfw channel! ღゝ◡╹)ノ♡")
+            return
+        if option == "danbooru" or option == "safebooru":
+            client = Danbooru(option, username="derpyhead999", api_key=DANBOORU_API_KEY)
+            posts = client.post_list(tags=fields, limit=80, random=True)
+            await ctx.send(posts[0]["file_url"])
+        elif option == "konachan" or option == "yandere":
+            client = Moebooru(
+                option, username="derpyhead999", password=KONACHAN_PASSWORD
+            )
+            posts = client.post_list(limit=80)
+            await ctx.send(random.choice(posts)["file_url"])
+        else:
+            await ctx.send(
+                "Please specify an option !search [danbooru/safebooru/lolibooru/konachan/yandere] [Up to 0-2 fields separated by comma's]\nNote that with lolibooru/konachan/yandere, tags are ignored"
+            )
+            return
 
     # Searches up images with specific tags on safebooru
     @commands.command(
@@ -57,7 +104,7 @@ class SearchCog(commands.Cog):
             if len(tags.split()) > 2:
                 await last_message.delete()
                 await ctx.send(
-                    "Too many tags; only 2 max! (Make sure to put comments between tags) (Too poor 4 more) -`д´-"
+                    "Too many tags; only 2 max! (Make sure to put comma's between tags) (Too poor 4 more) -`д´-"
                 )
         else:
             # If no tags are provided
