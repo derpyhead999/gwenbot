@@ -160,10 +160,14 @@ class MusicCog(commands.Cog):
             await ctx.send(f"An error occurred. :pensive:")
 
     @commands.command(name="add", help="Adds a song to the end of the queue")
-    async def add_song(self, ctx, query):
-        if not self.song_queue:
+    async def add_song(self, ctx, *, query=""):
+        if not ctx.voice_client.is_playing():
             # If song queue is empty, play song immediately
             await ctx.invoke(self.bot.get_command("play"), query=query)
+            return
+
+        if not query:
+            await ctx.send("Please specify a song to add (╬≖_≖)")
             return
 
         data = await self.loop.run_in_executor(
