@@ -69,6 +69,8 @@ class MessageCog(commands.Cog):
                 "least clutch nyoos momento",
                 f"I've seen {random.choice(people)} play, he doesn't even use a monitor. He visualizes the map in a detailed rendering, completely in his mind. He has a biological wallhack; his godlike perception highlights all enemies within light-years. His eyes are closed as his mouse gracefully swerves across the table, making immaculate twitches as he flicks from head to head. The bullets that escape his gun barrel are surgical; each making a deadly strike in between his opponent's eyes.",
                 f"{random.choice(people)} is a tactical genius. He is best known for his signature tactic 'going B, but then going A'. He also has a second little known tactic of 'going A, but going A'. What an absolute legend. Top 3 IGL for sure.",
+                f"If {random.choice(people)} has million number of fans i am one of them . if {random.choice(people)} has ten fans i am one of them. if {random.choice(people)} have only one fan and that is me . if {random.choice(people)} has no fans, that means i am no more on the earth. if world against the {random.choice(people)} , i am against the world.",
+                f"{random.choice(people)} is fantastic, just need to work on comms, aim, map awareness, crosshair placement, economy management, pistol aim, awp flicks, 1v1 maps, grenade and smoke spots, pop flashes, positioning, bomb plant positions, retake ability, bunny hopping, spray control and getting kills.",
             ]
             await message.channel.send(random.choice(valorant_references))
         if any([x in message.content.lower() for x in league_call]):
