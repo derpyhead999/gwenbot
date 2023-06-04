@@ -4,6 +4,8 @@ import random
 from bot import DANBOORU_API_KEY
 from pybooru import Danbooru, Moebooru
 from bot import KONACHAN_PASSWORD
+import requests
+import xml.etree.ElementTree as ET
 
 # Selenium; automating search tool
 from selenium import webdriver
@@ -11,6 +13,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
+
+SAFEBOORU_API_ROUTE = "https://safebooru.org/index.php?page=dapi&s=post&q=index"
 
 
 class SearchCog(commands.Cog):
@@ -36,30 +40,50 @@ class SearchCog(commands.Cog):
             fields = fields.replace(", ", ",")
             fields = fields.replace(" ", "_")
             fields = fields.replace(",", " ")
-            if len(fields.split()) > 2:
+            if len(fields.split()) > 2 and option != "safebooru2":
                 await last_message.delete()
                 await ctx.send(
-                    "Too many tags; Make sure to put comma's between tags -`д´-"
+                    "Too many tags (max 2); Make sure to put comma's between tags -`д´-"
                 )
                 return
+        if option == "safebooru2":
+            res = requests.get(
+                SAFEBOORU_API_ROUTE + "&limit=100&tags=" + fields.replace(" ", "%20")
+            )
+            # Parse XML document
+            posts = ET.fromstring(res.text)
+            if len(posts) == 0:
+                await ctx.send(
+                    "No posts found! Makes sure there are only 2 tags max + the format as specified in !help"
+                )
+                return
+            post = random.choice(posts)
+            # Select attribute with "file_url" and post image
+            await ctx.send(post.attrib["file_url"])
+            return
+
         if not ctx.channel.nsfw and option != "safebooru":
             await ctx.send("Horny searches go in nsfw channel! ღゝ◡╹)ノ♡")
             return
         if option == "danbooru" or option == "safebooru":
             client = Danbooru(option, username="derpyhead999", api_key=DANBOORU_API_KEY)
-            posts = client.post_list(tags=fields, limit=80, random=True)
-            await ctx.send(posts[0]["file_url"])
+            posts = client.post_list(tags=fields, limit=100)
         elif option == "konachan" or option == "yandere":
             client = Moebooru(
                 option, username="derpyhead999", password=KONACHAN_PASSWORD
             )
-            posts = client.post_list(limit=80)
-            await ctx.send(random.choice(posts)["file_url"])
+            posts = client.post_list(limit=100)
         else:
             await ctx.send(
                 "Please specify an option !search [danbooru/safebooru/lolibooru/konachan/yandere] [Up to 0-2 fields separated by comma's]\nNote that with lolibooru/konachan/yandere, tags are ignored"
             )
             return
+        if len(posts) == 0:
+            await ctx.send(
+                "No posts found! Makes sure there are only 2 tags max + the format as specified in !help"
+            )
+            return
+        await ctx.send(random.choice(posts)["file_url"])
 
     # Searches up images with specific tags on safebooru
     @commands.command(

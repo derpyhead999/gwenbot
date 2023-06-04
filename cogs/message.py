@@ -22,7 +22,6 @@ huh_call = [
     "bust",
     "moan",
     "groan",
-    "hot",
 ]
 sett_call = ["flash", "sett", "ult", "cookie"]
 
@@ -34,6 +33,18 @@ league_references = [
     "[insert genius pell witty remark on league players]",
     "classico 6 man",
     "11:58pm",
+]
+people = [
+    "APersonOnEarth",
+    "Genus",
+    "Imperial",
+    "Nyos",
+    "Burnhobo",
+    "Derpyhead999",
+    "GuessWho",
+    "Happyicy",
+    "Kaowayne",
+    "Catshark",
 ]
 
 
@@ -56,7 +67,8 @@ class MessageCog(commands.Cog):
             valorant_references = [
                 "poggers",
                 "least clutch nyoos momento",
-                "I've seen APersonOnEarth play, he doesn't even use a monitor. He visualizes the map in a detailed rendering, completely in his mind. He has a biological wallhack; his godlike perception highlights all enemies within light-years. His eyes are closed as his mouse gracefully swerves across the table, making immaculate twitches as he flicks from head to head. The bullets that escape his gun barrel are surgical; each making a deadly strike in between his opponent's eyes.",
+                f"I've seen {random.choice(people)} play, he doesn't even use a monitor. He visualizes the map in a detailed rendering, completely in his mind. He has a biological wallhack; his godlike perception highlights all enemies within light-years. His eyes are closed as his mouse gracefully swerves across the table, making immaculate twitches as he flicks from head to head. The bullets that escape his gun barrel are surgical; each making a deadly strike in between his opponent's eyes.",
+                f"{random.choice(people)} is a tactical genius. He is best known for his signature tactic 'going B, but then going A'. He also has a second little known tactic of 'going A, but going A'. What an absolute legend. Top 3 IGL for sure.",
             ]
             await message.channel.send(random.choice(valorant_references))
         if any([x in message.content.lower() for x in league_call]):
