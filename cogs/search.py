@@ -75,7 +75,7 @@ class SearchCog(commands.Cog):
             posts = client.post_list(limit=100)
         else:
             await ctx.send(
-                "Please specify an option !search [danbooru/safebooru/lolibooru/konachan/yandere] [Up to 0-2 fields separated by comma's]\nNote that with lolibooru/konachan/yandere, tags are ignored"
+                "Please specify an option !search [danbooru/safebooru/konachan/yandere/safebooru2] [Up to 0-2 fields separated by comma's]\nNote that with konachan/yandere, tags are ignored"
             )
             return
         if len(posts) == 0:
