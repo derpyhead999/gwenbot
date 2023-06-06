@@ -23,7 +23,7 @@ class SearchCog(commands.Cog):
 
     @commands.command(
         name="search",
-        help="Searches for posts on danbooru with !search [danbooru/safebooru/lolibooru/konachan/yandere] [Up to 2 fields separated by commas]\nNote that with lolibooru/konachan/yandere, tags are ignored",
+        help="Searches for posts on danbooru with !search [danbooru/safebooru/konachan/yandere/safebooru2] [Up to 2 fields separated by commas]\nNote that with konachan/yandere, tags are ignored",
     )
     async def search(self, ctx, *, tags=""):
         last_message = await ctx.send("Generating your image; just wait a min~~")
