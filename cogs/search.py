@@ -88,7 +88,7 @@ class SearchCog(commands.Cog):
     # Searches up images with specific tags on safebooru
     @commands.command(
         name="danbooru",
-        help="Gets a random image from danbooru; Recommend using -booru tags, with commas between tags; 2 tags max",
+        help="(old; use !search command) Gets a random image from danbooru; Recommend using -booru tags, with commas between tags; 2 tags max",
     )
     async def danbooru_search(self, ctx, *, tags=""):
         if not ctx.channel.nsfw:
@@ -163,7 +163,7 @@ class SearchCog(commands.Cog):
     # Searches up images with specific tags on safebooru
     @commands.command(
         name="safebooru",
-        help="Gets a random image from safebooru; Recommend using -booru tags, with commas between tags",
+        help="(old; use !search command) Gets a random image from safebooru; Recommend using -booru tags, with commas between tags",
     )
     async def safebooru_search(self, ctx, *, tags=""):
         last_message = await ctx.send("Generating your image; just wait a min~~")
