@@ -46,6 +46,7 @@ people = [
     "Kaowayne",
     "Catshark",
 ]
+pepege_call = ["pepega", "pepege", "dumb", "idiot"]
 
 
 class MessageCog(commands.Cog):
@@ -68,10 +69,13 @@ class MessageCog(commands.Cog):
             valorant_references = [
                 "poggers",
                 "least clutch nyoos momento",
-                f"I've seen {random.choice(people)} play, he doesn't even use a monitor. He visualizes the map in a detailed rendering, completely in his mind. He has a biological wallhack; his godlike perception highlights all enemies within light-years. His eyes are closed as his mouse gracefully swerves across the table, making immaculate twitches as he flicks from head to head. The bullets that escape his gun barrel are surgical; each making a deadly strike in between his opponent's eyes.",
-                f"{random.choice(people)} is a tactical genius. He is best known for his signature tactic 'going B, but then going A'. He also has a second little known tactic of 'going A, but going A'. What an absolute legend. Top 3 IGL for sure.",
+                f"I've seen {person} play, he doesn't even use a monitor. He visualizes the map in a detailed rendering, completely in his mind. He has a biological wallhack; his godlike perception highlights all enemies within light-years. His eyes are closed as his mouse gracefully swerves across the table, making immaculate twitches as he flicks from head to head. The bullets that escape his gun barrel are surgical; each making a deadly strike in between his opponent's eyes.",
+                f"{person} is a tactical genius. He is best known for his signature tactic 'going B, but then going A'. He also has a second little known tactic of 'going A, but going A'. What an absolute legend. Top 3 IGL for sure.",
                 f"If {person} has million number of fans i am one of them . if {person} has ten fans i am one of them. if {person} have only one fan and that is me . if {person} has no fans, that means i am no more on the earth. if world against the {person} , i am against the world.",
-                f"{random.choice(people)} is fantastic, just need to work on comms, aim, map awareness, crosshair placement, economy management, pistol aim, awp flicks, 1v1 maps, grenade and smoke spots, pop flashes, positioning, bomb plant positions, retake ability, bunny hopping, spray control and getting kills.",
+                f"{person} is fantastic, just need to work on comms, aim, map awareness, crosshair placement, economy management, pistol aim, awp flicks, 1v1 maps, grenade and smoke spots, pop flashes, positioning, bomb plant positions, retake ability, bunny hopping, spray control and getting kills.",
+                f"if {person}👽and my girl👧😍 both drowning 😱 👋 and I can only save one😤😬Catch me at the Ascent B site🚪🔴 with my boy on phoenix 🌈🕰",
+                f"{person} skilled player but that is not normally, This very very insane....They need to check him pc and game.....Maybe he not cheating but maybe he using the game deficit ...and this cant seem on game screen..He needs to check-up....",
+                "valarante child game.... look to cartoon grapfix to make kid player happy like children show.. valarante cartoon world with rainbow unlike counter strike chad with dark corridorr and raelistic gun.. valarante like playhouse. valarant playor run from csgo fear of dark world and realism",
             ]
             await message.channel.send(random.choice(valorant_references))
         if any([x in message.content.lower() for x in league_call]):
@@ -84,11 +88,25 @@ class MessageCog(commands.Cog):
             )
         if "peter" in message.content.lower():
             await message.channel.send("技术问题")
-        if "cook" in message.content.lower():
-            await message.channel.send("Let him cook 🧑‍🍳")
+        if "lethimcook" in message.content.lower().replace(" ", ""):
+            with open("img/lethimcook.jpg", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
         if message.content.lower() == "riot":
-            await message.delete()
             with open("img/RIOT.gif", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+        if "kekwait" in message.content.lower():
+            with open("img/kekwait.png", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+            return
+        if "kekw" in message.content.lower():
+            with open("img/kekw.png", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+        if any([x in message.content.lower() for x in pepege_call]):
+            with open("img/pepege.png", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
         if any([x in message.content.lower() for x in jg_call]):
@@ -98,9 +116,12 @@ class MessageCog(commands.Cog):
                 await message.channel.send(
                     "my jg watching 3 losing lanes getting blamed lvl 3"
                 )
-        if message.content.lower() == "xdd":
-            await message.delete()
+        if "xdd" in message.content.lower():
             with open("img/xdd.jpg", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+        if "monka" in message.content.lower():
+            with open("img/monka.png", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
         if "doctor" in message.content.lower():
