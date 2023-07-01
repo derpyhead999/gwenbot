@@ -23,7 +23,6 @@ huh_call = [
     "moan",
     "groan",
 ]
-sett_call = ["flash", "sett", "ult", "cookie"]
 
 league_references = [
     "xdd",
@@ -33,6 +32,8 @@ league_references = [
     "[insert genius pell witty remark on league players]",
     "classico 6 man",
     "11:58pm",
+    "👏WOW WOW LEAGUE OF LEGENDS WOW👏",
+    "체력 4700 방어력 329 마저201 인 챔피언👤이 저지불가🚫, 쉴드🛡, 벽🧱 넘기는 거 있고요. 에어본🌪 있고, 심지어 쿨타임은 1️⃣초밖에 안되고 마나🧙‍♂️는 1️⃣5️⃣ 들고 w는 심지어 변신💫하면 쿨 초기화에다가 패시브는 고정피해🗡가 들어가며 그 다음에 방마저🥋 올리면📈 올릴수록📈 스킬 가속⏰이 생기고! q에 스킬가속⏰이 생기고 스킬 속도🚀가 빨라지고📈 그 다음에 공격력🗡 계수가 있어가지고 W가 그 이익-으아아아악😱😱",
 ]
 people = [
     "APersonOnEarth",
@@ -76,12 +77,17 @@ class MessageCog(commands.Cog):
                 f"if {person}👽and my girl👧😍 both drowning 😱 👋 and I can only save one😤😬Catch me at the Ascent B site🚪🔴 with my boy on phoenix 🌈🕰",
                 f"{person} skilled player but that is not normally, This very very insane....They need to check him pc and game.....Maybe he not cheating but maybe he using the game deficit ...and this cant seem on game screen..He needs to check-up....",
                 "valarante child game.... look to cartoon grapfix to make kid player happy like children show.. valarante cartoon world with rainbow unlike counter strike chad with dark corridorr and raelistic gun.. valarante like playhouse. valarant playor run from csgo fear of dark world and realism",
+                f"Who is {person}? For the blind, He is the vision. For the hungry, He is the chef. For the thirsty, He is the water. If {person} thinks, I agree. If {person} speaks, I'm listening. If {person} has one fan, it is me. If {person} has no fans, I do not exist.",
             ]
             await message.channel.send(random.choice(valorant_references))
         if any([x in message.content.lower() for x in league_call]):
             await message.channel.send(random.choice(league_references))
         if "genus" in message.content.lower():
             await message.channel.send("pell \U0001F913")
+        if "ksante" in message.content.lower():
+            await message.channel.send(
+                "체력 4700 방어력 329 마저201 인 챔피언👤이 저지불가🚫, 쉴드🛡, 벽🧱 넘기는 거 있고요. 에어본🌪 있고, 심지어 쿨타임은 1️⃣초밖에 안되고 마나🧙‍♂️는 1️⃣5️⃣ 들고 w는 심지어 변신💫하면 쿨 초기화에다가 패시브는 고정피해🗡가 들어가며 그 다음에 방마저🥋 올리면📈 올릴수록📈 스킬 가속⏰이 생기고! q에 스킬가속⏰이 생기고 스킬 속도🚀가 빨라지고📈 그 다음에 공격력🗡 계수가 있어가지고 W가 그 이익-으아아아악😱😱"
+            )
         if "based" in message.content.lower():
             await message.channel.send(
                 "Based? Based on what? In your dick? Please shut the fuck up and use words properly you fuckin troglodyte, do you think God gave us a freedom of speech just to spew random words that have no meaning that doesn't even correllate to the topic of the conversation? Like please you always complain about why no one talks to you or no one expresses their opinions on you because you're always spewing random shit like poggers based cringe and when you try to explain what it is and you just say that it's funny like what? What the fuck is funny about that do you think you'll just become a stand-up comedian that will get a standing ovation just because you said 'cum' in the stage? HELL NO YOU FUCKIN IDIOT, so please shut the fuck up and use words properly you dumb bitch"
@@ -89,7 +95,7 @@ class MessageCog(commands.Cog):
         if "peter" in message.content.lower():
             await message.channel.send("技术问题")
         if "lethimcook" in message.content.lower().replace(" ", ""):
-            with open("img/lethimcook.jpg", "rb") as f:
+            with open("img/lethimcook.png", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
         if message.content.lower() == "riot":
@@ -103,6 +109,10 @@ class MessageCog(commands.Cog):
             return
         if "kekw" in message.content.lower():
             with open("img/kekw.png", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+        if "icant" in message.content.lower().replace(" ", ""):
+            with open("img/icant.png", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
         if any([x in message.content.lower() for x in pepege_call]):
@@ -144,10 +154,6 @@ class MessageCog(commands.Cog):
             with open("img/copege.gif", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
-        if "promote" in message.content.lower():
-            with open("img/promote.png", "rb") as f:
-                picture = discord.File(f)
-                await message.channel.send(file=picture)
         if "flush" in message.content.lower():
             with open("img/flush.png", "rb") as f:
                 picture = discord.File(f)
@@ -164,12 +170,31 @@ class MessageCog(commands.Cog):
             with open("img/nerdge.gif", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
+        if "yep" in message.content.lower():
+            with open("img/yep.png", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+        if "bedge" in message.content.lower():
+            with open("img/bedge.png", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+        if "pog" in message.content.lower():
+            with open("img/pagman.png", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+        if "lewd" in message.content.lower():
+            with open("img/prxgasm.png", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+        if "surely" in message.content.lower():
+            with open("img/surely.png", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
         if any([x in message.content.lower() for x in sadge_call]):
             with open("img/sadge.png", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
-        if message.content.lower() == "noted":
-            await message.delete()
+        if "noted" in message.content.lower():
             with open("img/noted.gif", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
@@ -177,11 +202,6 @@ class MessageCog(commands.Cog):
             with open("img/huh.gif", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
-        if any([x in message.content.lower() for x in sett_call]):
-            with open("img/sett.gif", "rb") as f:
-                picture = discord.File(f)
-                await message.channel.send(file=picture)
-                await message.channel.send("?")
         if message.content.lower() == "5head":
             await message.delete()
             with open("img/5head.png", "rb") as f:
