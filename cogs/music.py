@@ -79,13 +79,6 @@ class MusicCog(commands.Cog):
             return
         await voice_channel.connect()
 
-        # permissions = voice_channel.permissions_for(ctx.me)
-        # if not permissions.connect or not permissions.speak:
-        #   await ctx.send(
-        #     "I don't have permission to join or speak in that voice channel."
-        #   )
-        #   return
-
     @commands.command(name="leave", help="To make the bot leave the voice channel")
     async def leave(self, ctx):
         voice_client = ctx.message.guild.voice_client
@@ -210,7 +203,7 @@ class MusicCog(commands.Cog):
                 "The bot was not playing anything before this. Use !play [url] command"
             )
 
-    @commands.command(name="stop", help="Stops the song")
+    @commands.command(name="skip", help="Skips the song")
     async def stop(self, ctx):
         voice_client = ctx.message.guild.voice_client
         if voice_client.is_playing():
