@@ -17,7 +17,7 @@ from selenium.common.exceptions import NoSuchElementException
 SAFEBOORU_API_ROUTE = "https://safebooru.org/index.php?page=dapi&s=post&q=index"
 
 
-class SearchCog(commands.Cog):
+class BooruSearch(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -225,4 +225,4 @@ class SearchCog(commands.Cog):
 
 
 async def setup(bot: commands.Cog):
-    await bot.add_cog(SearchCog(bot))
+    await bot.add_cog(BooruSearch(bot))

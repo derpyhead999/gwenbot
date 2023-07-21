@@ -50,7 +50,7 @@ people = [
 pepege_call = ["pepega", "pepege", "dumb", "idiot"]
 
 
-class MessageCog(commands.Cog):
+class EmoteBot(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -102,12 +102,20 @@ class MessageCog(commands.Cog):
             with open("img/RIOT.gif", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
+        if message.content.lower() == "blizzard":
+            with open("img/blizzard.gif", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+        if message.content.lower() == "despair" or message.content.lower() == "bocchi":
+            with open("img/bocchi.gif", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
         if "kekwait" in message.content.lower():
             with open("img/kekwait.png", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
             return
-        if "kekw" in message.content.lower():
+        if "kek" in message.content.lower():
             with open("img/kekw.png", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
@@ -210,4 +218,4 @@ class MessageCog(commands.Cog):
 
 
 async def setup(bot: commands.Cog):
-    await bot.add_cog(MessageCog(bot))
+    await bot.add_cog(EmoteBot(bot))

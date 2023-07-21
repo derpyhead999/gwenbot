@@ -13,7 +13,7 @@ from riotwatcher import LolWatcher, ApiError
 # RIOT_API_KEY = os.getenv("RIOT_API_KEY")
 
 
-class UserCog(commands.Cog):
+class LeagueInfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -100,4 +100,4 @@ class UserCog(commands.Cog):
 
 
 async def setup(bot: commands.Cog):
-    await bot.add_cog(UserCog(bot))
+    await bot.add_cog(LeagueInfo(bot))

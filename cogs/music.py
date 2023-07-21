@@ -7,6 +7,7 @@ import time
 import validators
 from bot import YOUTUBE_API_KEY
 from googleapiclient.discovery import build
+import yt_dlp
 
 ytdlopts = {
     "format": "bestaudio/best",
@@ -29,11 +30,10 @@ ffmpeg_options = {
     "options": "-vn",
     "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
 }
+ytdl = yt_dlp.YoutubeDL(ytdlopts)
 
-ytdl = youtube_dl.YoutubeDL(ytdlopts)
 
-
-class MusicCog(commands.Cog):
+class MusicBot(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.song_queue = []
@@ -49,23 +49,27 @@ class MusicCog(commands.Cog):
                     discord.FFmpegPCMAudio(
                         source=song, **ffmpeg_options, executable="ffmpeg"
                     ),
-                    after=lambda e: MusicCog.play_next(self, ctx),
+                    after=lambda e: MusicBot.play_next(self, ctx),
                 )  # playing the audio
                 voice_client.source = discord.PCMVolumeTransformer(
-                    voice_client.source, 0.15
+                    voice_client.source, 0.2
                 )
             except Exception as e:
                 print(e)
 
         else:
-            time.sleep(90)
+            time.sleep(120)
             if not voice_client.is_playing():
                 asyncio.run_coroutine_threadsafe(voice_client.disconnect(), self.loop)
                 asyncio.run_coroutine_threadsafe(
                     ctx.send("No songs in queue; shutting down"), self.loop
                 )
 
-    @commands.command(name="join", help="Tells the bot to join the voice channel")
+    @commands.command(
+        name="join",
+        help="Tells the bot to join the voice channel",
+        aliases=["j"],
+    )
     async def join_call(self, ctx):
         if not ctx.message.author.voice:
             await ctx.send(
@@ -79,7 +83,11 @@ class MusicCog(commands.Cog):
             return
         await voice_channel.connect()
 
-    @commands.command(name="leave", help="To make the bot leave the voice channel")
+    @commands.command(
+        name="leave",
+        help="To make the bot leave the voice channel",
+        aliases=["l"],
+    )
     async def leave(self, ctx):
         voice_client = ctx.message.guild.voice_client
         if voice_client.is_connected():
@@ -87,9 +95,12 @@ class MusicCog(commands.Cog):
         else:
             await ctx.send("The bot is not connected to a voice channel.")
 
-    @commands.command(name="play", help="To play song")
+    @commands.command(name="play", help="To play song", aliases=["p"])
     async def play(self, ctx, *, query=""):
         voice_client = ctx.guild.voice_client
+        if ctx.voice_client.is_playing():
+            await ctx.send("Already playing a song!")
+            return
         if voice_client == None:
             print(voice_client)
             await ctx.send("Gwen is not connected to a voice channel!")
@@ -140,11 +151,9 @@ class MusicCog(commands.Cog):
                 discord.FFmpegPCMAudio(
                     source=song, **ffmpeg_options, executable="ffmpeg"
                 ),
-                after=lambda e: MusicCog.play_next(self, ctx),
+                after=lambda e: MusicBot.play_next(self, ctx),
             )  # playing the audio
-            voice_client.source = discord.PCMVolumeTransformer(
-                voice_client.source, 0.15
-            )
+            voice_client.source = discord.PCMVolumeTransformer(voice_client.source, 0.2)
             await ctx.send(
                 f"**Now playing:** {title}"
             )  # sending the title of the video
@@ -152,7 +161,11 @@ class MusicCog(commands.Cog):
             print(e)
             await ctx.send(f"An error occurred. :pensive:")
 
-    @commands.command(name="add", help="Adds a song to the end of the queue")
+    @commands.command(
+        name="add",
+        help="Adds a song to the end of the queue",
+        aliases=["a", "+"],
+    )
     async def add_song(self, ctx, *, query=""):
         if not ctx.voice_client.is_playing():
             # If song queue is empty, play song immediately
@@ -203,12 +216,12 @@ class MusicCog(commands.Cog):
                 "The bot was not playing anything before this. Use !play [url] command"
             )
 
-    @commands.command(name="skip", help="Skips the song")
+    @commands.command(name="skip", help="Skips the song", aliases=["s"])
     async def stop(self, ctx):
         voice_client = ctx.message.guild.voice_client
         if voice_client.is_playing():
             await voice_client.stop()
-            await ctx.send("Current song has been cancelled")
+            await ctx.send("Current song has been skipped")
         else:
             await ctx.send(
                 "Gwen is not playing anything at the moment. Use !play [url] command"
@@ -236,7 +249,9 @@ class MusicCog(commands.Cog):
         )
         await ctx.send(embed=embed)
 
-    @commands.command(name="queue", help="Displays the entire queue of songs")
+    @commands.command(
+        name="queue", help="Displays the entire queue of songs", aliases=["q"]
+    )
     async def show_queue(self, ctx):
         embed = discord.Embed(
             title="Queued Songs",
@@ -265,4 +280,4 @@ class MusicCog(commands.Cog):
 
 
 async def setup(bot: commands.Cog):
-    await bot.add_cog(MusicCog(bot))
+    await bot.add_cog(MusicBot(bot))

@@ -3,7 +3,7 @@ from discord.ext import commands
 import random
 
 
-class UwufyCog(commands.Cog):
+class UwufyBot(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -61,4 +61,4 @@ class UwufyCog(commands.Cog):
 
 
 async def setup(bot: commands.Cog):
-    await bot.add_cog(UwufyCog(bot))
+    await bot.add_cog(UwufyBot(bot))
