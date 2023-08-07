@@ -62,9 +62,7 @@ class EmoteBot(commands.Cog):
         if "stupid" in message.content.lower():
             await message.channel.send("stoopid")
         if "clash" in message.content.lower():
-            await message.channel.send(
-                "8:00pm Start? ✅\n2 Malders? ✅\n2 Griefers? ✅\n'Idc last game Ionia comp'? ✅\n⭕ ❌ ❌? ✅\nYep that's clash ✅"
-            )
+            await message.channel.send("A People on Earth")
         if "valo" in message.content.lower():
             person = random.choice(people)
             valorant_references = [
@@ -80,6 +78,13 @@ class EmoteBot(commands.Cog):
                 f"Who is {person}? For the blind, He is the vision. For the hungry, He is the chef. For the thirsty, He is the water. If {person} thinks, I agree. If {person} speaks, I'm listening. If {person} has one fan, it is me. If {person} has no fans, I do not exist.",
             ]
             await message.channel.send(random.choice(valorant_references))
+        if "faker" in message.content.lower():
+            faker_references = [
+                '"Listen, Faker, we can\'t give you a quarter of Seoul--" said Joe, only to be immediately interrupted by footage of T1 getting annihilated by the 10th place LCK team.\n"Yes, I get it, but still a quarter of Seoul--" said Joe, only to AGAIN be interrupted by Faker showing footage of him back on the T1 team, totally annihilating KDF.\n"Is the entire Gangnam district good enough for you?"',
+                "What kind of sick fuck hates Faker? NO I don't accept it I think you actually love Faker, and you just hate yourself becuase you aren't him an you're just a jealous hoe, and now we hate you too, good job you played yourself."
+                "Really unfair conflict of interest seeing how Faker is part-owner of T1 and a complete owner of KDF",
+            ]
+            await message.channel.send(random.choice(faker_references))
         if any([x in message.content.lower() for x in league_call]):
             await message.channel.send(random.choice(league_references))
         if "genus" in message.content.lower():
@@ -93,7 +98,11 @@ class EmoteBot(commands.Cog):
                 "Based? Based on what? In your dick? Please shut the fuck up and use words properly you fuckin troglodyte, do you think God gave us a freedom of speech just to spew random words that have no meaning that doesn't even correllate to the topic of the conversation? Like please you always complain about why no one talks to you or no one expresses their opinions on you because you're always spewing random shit like poggers based cringe and when you try to explain what it is and you just say that it's funny like what? What the fuck is funny about that do you think you'll just become a stand-up comedian that will get a standing ovation just because you said 'cum' in the stage? HELL NO YOU FUCKIN IDIOT, so please shut the fuck up and use words properly you dumb bitch"
             )
         if "peter" in message.content.lower():
-            await message.channel.send("技术问题")
+            peter_references = [
+                f"I saw APersonOnEarth once in a McDonald's and he was acting strange. Whenever someone came in, he'd go behind them. It was like he never wanted to go first. When all the people bought their lunches it was his turn, since no one was left. He looked at me and said \"I'd rather save my money for tomorrow\" and he bhopped out through the window. Strange guy...",
+                "技术问题",
+            ]
+            await message.channel.send(random.choice(peter_references))
         if "lethimcook" in message.content.lower().replace(" ", ""):
             with open("img/lethimcook.png", "rb") as f:
                 picture = discord.File(f)
