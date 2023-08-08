@@ -81,7 +81,7 @@ class EmoteBot(commands.Cog):
         if "faker" in message.content.lower():
             faker_references = [
                 '"Listen, Faker, we can\'t give you a quarter of Seoul--" said Joe, only to be immediately interrupted by footage of T1 getting annihilated by the 10th place LCK team.\n"Yes, I get it, but still a quarter of Seoul--" said Joe, only to AGAIN be interrupted by Faker showing footage of him back on the T1 team, totally annihilating KDF.\n"Is the entire Gangnam district good enough for you?"',
-                "What kind of sick fuck hates Faker? NO I don't accept it I think you actually love Faker, and you just hate yourself becuase you aren't him an you're just a jealous hoe, and now we hate you too, good job you played yourself."
+                "What kind of sick fuck hates Faker? NO I don't accept it I think you actually love Faker, and you just hate yourself becuase you aren't him an you're just a jealous hoe, and now we hate you too, good job you played yourself.",
                 "Really unfair conflict of interest seeing how Faker is part-owner of T1 and a complete owner of KDF",
             ]
             await message.channel.send(random.choice(faker_references))
