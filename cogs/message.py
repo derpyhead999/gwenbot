@@ -83,6 +83,7 @@ class EmoteBot(commands.Cog):
                 '"Listen, Faker, we can\'t give you a quarter of Seoul--" said Joe, only to be immediately interrupted by footage of T1 getting annihilated by the 10th place LCK team.\n"Yes, I get it, but still a quarter of Seoul--" said Joe, only to AGAIN be interrupted by Faker showing footage of him back on the T1 team, totally annihilating KDF.\n"Is the entire Gangnam district good enough for you?"',
                 "What kind of sick fuck hates Faker? NO I don't accept it I think you actually love Faker, and you just hate yourself becuase you aren't him an you're just a jealous hoe, and now we hate you too, good job you played yourself.",
                 "Really unfair conflict of interest seeing how Faker is part-owner of T1 and a complete owner of KDF",
+                "Did you know that pregnancy rates in South Korea are at an all time high? Yes, Chovy is just 22 years old and already fathering Faker.",
             ]
             await message.channel.send(random.choice(faker_references))
         if any([x in message.content.lower() for x in league_call]):
@@ -101,21 +102,30 @@ class EmoteBot(commands.Cog):
             peter_references = [
                 f"I saw APersonOnEarth once in a McDonald's and he was acting strange. Whenever someone came in, he'd go behind them. It was like he never wanted to go first. When all the people bought their lunches it was his turn, since no one was left. He looked at me and said \"I'd rather save my money for tomorrow\" and he bhopped out through the window. Strange guy...",
                 "技术问题",
+                "APersonOnEarth has such a big champ pool, he can play headmistress fiora, heartpiercer fiora, ig fiora, lunar beast fiora, bewitching fiora, royal guard fiora, nightraven fiora, project: fiora, pool party fiora, soaring sword fiora, pulsefire fiora, faerie court fiora.",
             ]
             await message.channel.send(random.choice(peter_references))
         if "lethimcook" in message.content.lower().replace(" ", ""):
             with open("img/lethimcook.png", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
-        if message.content.lower() == "riot":
+        if "riot" in message.content.lower():
             with open("img/RIOT.gif", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
-        if message.content.lower() == "blizzard":
+        if "aware" in message.content.lower():
+            with open("img/aware.gif", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+        if "troll" in message.content.lower():
+            with open("img/tf.png", "rb") as f:
+                picture = discord.File(f)
+                await message.channel.send(file=picture)
+        if "blizzard" in message.content.lower():
             with open("img/blizzard.gif", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
-        if message.content.lower() == "despair" or message.content.lower() == "bocchi":
+        if message.content.lower() == "bocchi":
             with open("img/bocchi.gif", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
