@@ -1,0 +1,9 @@
+# No version specifiers
+selenium
+requests
+discord
+dotenv
+validators
+yt_dlp
+googleapiclient
+riotwatcher

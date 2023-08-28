@@ -109,7 +109,7 @@ class EmoteBot(commands.Cog):
             with open("img/lethimcook.png", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
-        if "riot" in message.content.lower():
+        if ("riot" in message.content.lower()) or ("rito" in message.content.lower()):
             with open("img/RIOT.gif", "rb") as f:
                 picture = discord.File(f)
                 await message.channel.send(file=picture)
