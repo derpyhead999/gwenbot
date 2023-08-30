@@ -8,5 +8,9 @@
     -Other WIP features\
 
 ## How to run:
-    -Run ```git clone``` on the repository\
-    -Running ```python bot.py```
+    -Run ```
+    git clone
+    ``` on the repository\
+    -Running ```
+    python bot.py
+    ```
