@@ -76,6 +76,7 @@ class EmoteBot(commands.Cog):
                 f"{person} skilled player but that is not normally, This very very insane....They need to check him pc and game.....Maybe he not cheating but maybe he using the game deficit ...and this cant seem on game screen..He needs to check-up....",
                 "valarante child game.... look to cartoon grapfix to make kid player happy like children show.. valarante cartoon world with rainbow unlike counter strike chad with dark corridorr and raelistic gun.. valarante like playhouse. valarant playor run from csgo fear of dark world and realism",
                 f"Who is {person}? For the blind, He is the vision. For the hungry, He is the chef. For the thirsty, He is the water. If {person} thinks, I agree. If {person} speaks, I'm listening. If {person} has one fan, it is me. If {person} has no fans, I do not exist.",
+                "En ➜ root ➜ 🕳️",
             ]
             await message.channel.send(random.choice(valorant_references))
         if "faker" in message.content.lower():
@@ -84,6 +85,9 @@ class EmoteBot(commands.Cog):
                 "What kind of sick fuck hates Faker? NO I don't accept it I think you actually love Faker, and you just hate yourself becuase you aren't him an you're just a jealous hoe, and now we hate you too, good job you played yourself.",
                 "Really unfair conflict of interest seeing how Faker is part-owner of T1 and a complete owner of KDF",
                 "Did you know that pregnancy rates in South Korea are at an all time high? Yes, Chovy is just 22 years old and already fathering Faker.",
+                "I refuse to credit Faker with this play. There is no way he said 'Yo, Keria, body these fools.' It just doesn't work that way.",
+                "Faker: Keria, stop playing bad.\nKeria: Thanks, i'm literally cured.",
+                "What kind of sick fuck hates Faker? NO I don't accept it i think you actually love faker, and you hate yourself because you aren't him an you're just a jealous hoe, and now we hate you too, good job you played yourself.",
             ]
             await message.channel.send(random.choice(faker_references))
         if any([x in message.content.lower() for x in league_call]):
