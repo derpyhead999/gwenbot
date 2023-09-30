@@ -86,6 +86,7 @@ initial_extensions = [
     "cogs.uwufy",
     "cogs.user",
     "cogs.music",
+    "cogs.reddit",
 ]
 
 

@@ -7,3 +7,4 @@ __pycache__/
 cogs/__pycache__/
 .vscode
 *.pyc
+reddit/client_secrets.json

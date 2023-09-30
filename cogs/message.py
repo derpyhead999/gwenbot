@@ -77,8 +77,16 @@ class EmoteBot(commands.Cog):
                 "valarante child game.... look to cartoon grapfix to make kid player happy like children show.. valarante cartoon world with rainbow unlike counter strike chad with dark corridorr and raelistic gun.. valarante like playhouse. valarant playor run from csgo fear of dark world and realism",
                 f"Who is {person}? For the blind, He is the vision. For the hungry, He is the chef. For the thirsty, He is the water. If {person} thinks, I agree. If {person} speaks, I'm listening. If {person} has one fan, it is me. If {person} has no fans, I do not exist.",
                 "En ➜ root ➜ 🕳️",
+                "img/spike.png",
+                "img/valorant.gif",
             ]
-            await message.channel.send(random.choice(valorant_references))
+            msg = random.choice(valorant_references)
+            if msg.startswith("img"):
+                with open(msg, "rb") as f:
+                    picture = discord.File(f)
+                    await message.channel.send(file=picture)
+            else:
+                await message.channel.send(msg)
         if "faker" in message.content.lower():
             faker_references = [
                 '"Listen, Faker, we can\'t give you a quarter of Seoul--" said Joe, only to be immediately interrupted by footage of T1 getting annihilated by the 10th place LCK team.\n"Yes, I get it, but still a quarter of Seoul--" said Joe, only to AGAIN be interrupted by Faker showing footage of him back on the T1 team, totally annihilating KDF.\n"Is the entire Gangnam district good enough for you?"',
@@ -95,9 +103,14 @@ class EmoteBot(commands.Cog):
         if "genus" in message.content.lower():
             await message.channel.send("pell \U0001F913")
         if "ksante" in message.content.lower():
-            await message.channel.send(
-                "체력 4700 방어력 329 마저201 인 챔피언👤이 저지불가🚫, 쉴드🛡, 벽🧱 넘기는 거 있고요. 에어본🌪 있고, 심지어 쿨타임은 1️⃣초밖에 안되고 마나🧙‍♂️는 1️⃣5️⃣ 들고 w는 심지어 변신💫하면 쿨 초기화에다가 패시브는 고정피해🗡가 들어가며 그 다음에 방마저🥋 올리면📈 올릴수록📈 스킬 가속⏰이 생기고! q에 스킬가속⏰이 생기고 스킬 속도🚀가 빨라지고📈 그 다음에 공격력🗡 계수가 있어가지고 W가 그 이익-으아아아악😱😱"
-            )
+            ksante_ref = ["체력 4700 방어력 329 마저201 인 챔피언👤이 저지불가🚫, 쉴드🛡, 벽🧱 넘기는 거 있고요. 에어본🌪 있고, 심지어 쿨타임은 1️⃣초밖에 안되고 마나🧙‍♂️는 1️⃣5️⃣ 들고 w는 심지어 변신💫하면 쿨 초기화에다가 패시브는 고정피해🗡가 들어가며 그 다음에 방마저🥋 올리면📈 올릴수록📈 스킬 가속⏰이 생기고! q에 스킬가속⏰이 생기고 스킬 속도🚀가 빨라지고📈 그 다음에 공격력🗡 계수가 있어가지고 W가 그 이익-으아아아악😱😱", "img/ksante.gif"]
+            msg = random.choice(ksante_ref)
+            if msg.startswith("img"):
+                with open(msg, "rb") as f:
+                    picture = discord.File(f)
+                    await message.channel.send(file=picture)
+            else:
+                await message.channel.send(msg)
         if "based" in message.content.lower():
             await message.channel.send(
                 "Based? Based on what? In your dick? Please shut the fuck up and use words properly you fuckin troglodyte, do you think God gave us a freedom of speech just to spew random words that have no meaning that doesn't even correllate to the topic of the conversation? Like please you always complain about why no one talks to you or no one expresses their opinions on you because you're always spewing random shit like poggers based cringe and when you try to explain what it is and you just say that it's funny like what? What the fuck is funny about that do you think you'll just become a stand-up comedian that will get a standing ovation just because you said 'cum' in the stage? HELL NO YOU FUCKIN IDIOT, so please shut the fuck up and use words properly you dumb bitch"
